@@ -9,7 +9,14 @@ let nameField = document.getElementById("name");
 //Auto focus on name field upon loading the website
 nameField.focus();
 
-
+//Make sure user doesn't skip namefield
+nameField.addEventListener("blur", () => {if(nameField.value === ""){
+    document.getElementById("name-hint").style.display = "block";
+    nameField.parentNode.className="not-valid"
+}else{
+    document.getElementById("name-hint").style.display = "none";
+    nameField.parentNode.className="valid"
+}})
 
 //Job Role
 //Selecting elements
@@ -61,9 +68,6 @@ function updateColor(){
 
 
 
-
-
-
 //Register for Activities
 
 //Selecting elements and declaring of variables
@@ -103,8 +107,12 @@ function calculateCost(){
 }
 
 
-
-
+//Add focus/blur to activities
+let checkbox = activitiesBox.getElementsByTagName("INPUT");
+for (let i = 0; i < checkbox.length; i++){
+    checkbox[i].addEventListener("focus", () => {checkbox[i].parentNode.style.borderColor = "#0949FA"})
+    checkbox[i].addEventListener("blur", () => {checkbox[i].parentNode.style.borderColor = ""})
+}
 
 
 //Payment Info
@@ -131,6 +139,8 @@ function changePaymentOption(){
     document.getElementById(method).style.display = "block";
 }
 
+
+
 //Form validation
 let eMail = document.getElementById("email");
 let cardNr = document.getElementById("cc-num");
@@ -154,18 +164,41 @@ function validateForm(){
         console.log("invalid name")
         isValid = false;
         document.getElementById("name-hint").style.display = "block";
+        nameField.parentNode.className = "not-valid"
+    }else{
+        document.getElementById("name-hint").style.display = "none";
+        nameField.parentNode.className = "valid"
     }
-    //check that eMail is valid
-    if(!emailRegex.test(eMail.value)){
+    //check that eMail is submitted and valid
+    if(eMail.value === ""){
+        console.log("email is required")
+        isValid = false;
+        document.getElementById("email-hint").style.display = "block";
+        document.getElementById("email-hint").textContent = "Email is required"
+        eMail.parentNode.className = "not-valid"
+    }else if(!emailRegex.test(eMail.value)){
         console.log("invalid email")
         isValid = false;
         document.getElementById("email-hint").style.display = "block";
+        document.getElementById("email-hint").textContent = "Email address must be formatted correctly"
+        eMail.parentNode.className = "not-valid"
+    }else{
+        document.getElementById("email-hint").style.display = "none";
+        eMail.parentNode.className = "valid"
     }
     //check that at least one activity has been chosen
-    if(!activitiesBox.getElementsByTagName("INPUT")[0].checked){
+    if(totalSum == 0){
         console.log("you have to register to at least 1 event")
         isValid = false;
         document.getElementById("activities-hint").style.display = "block";
+        document.getElementById("activities").classList.add("not-valid");
+    }else{
+        document.getElementById("activities-hint").style.display = "none";
+        if(document.getElementById("activities").classList.contains("not-valid")){
+            document.getElementById("activities").classList.replace("not-valid","valid")
+        }else{
+            document.getElementById("activities").classList.add("valid")
+        }
     }
 
 
@@ -175,16 +208,28 @@ function validateForm(){
             console.log("Invalid cardNr")
             isValid = false;
             document.getElementById("cc-hint").style.display = "block";
+            cardNr.parentNode.className = "not-valid"
+        }else{
+            document.getElementById("cc-hint").style.display = "none";
+            cardNr.parentNode.className = "valid"
         }
         if (!zipRegex.test(zipCode.value)){
             console.log("Invalid Zip-code")
             isValid = false;
             document.getElementById("zip-hint").style.display = "block";
+            zipCode.parentNode.className = "not-valid"
+        }else{
+            document.getElementById("zip-hint").style.display = "none";
+            zipCode.parentNode.className = "valid"
         }
         if (!cvvRegex.test(cvv.value)){
             console.log("Invalid CVV")
             isValid = false;
             document.getElementById("cvv-hint").style.display = "block";
+            cvv.parentNode.className = "not-valid"
+        }else{
+            document.getElementById("cvv-hint").style.display = "none";
+            cvv.parentNode.className = "valid"
         }
         if(expMonth.value == "Select Date"){
             console.log("Invalid expiration date")
@@ -200,7 +245,7 @@ function validateForm(){
 
 formElement.addEventListener("submit", (event) => {
     if(validateForm()){
-        console.log("registration complete. Congrats and welcome!")
+        console.log("Registration complete. Congrats and welcome!")
     } else{
         event.preventDefault();
         console.log("Something went wrong, please review your details before trying again")
