@@ -10,13 +10,19 @@ let nameField = document.getElementById("name");
 nameField.focus();
 
 //Make sure user doesn't skip namefield
-nameField.addEventListener("blur", () => {if(nameField.value === ""){
-    document.getElementById("name-hint").style.display = "block";
-    nameField.parentNode.className="not-valid"
-}else{
-    document.getElementById("name-hint").style.display = "none";
-    nameField.parentNode.className="valid"
-}})
+nameField.addEventListener("input", () => {
+    if(nameField.value === ""){
+        document.getElementById("name-hint").style.display = "block";
+        document.getElementById("name-hint").textContent = "Name required"
+        nameField.parentNode.className="not-valid"
+    }else if(/\d/.test(nameField.value)){
+        document.getElementById("name-hint").style.display = "block";
+        document.getElementById("name-hint").textContent = "Name may not contain numbers"
+        nameField.parentNode.className="not-valid"
+    }else{
+        document.getElementById("name-hint").style.display = "none";
+        nameField.parentNode.className="valid"
+    }})
 
 //Job Role
 //Selecting elements
@@ -160,10 +166,16 @@ function validateForm(){
     let zipRegex = /^\d{5}$/;
     let cvvRegex = /^\d{3}$/;
     //check that nameField has a value
-    if(!nameRegex.test(nameField.value)){
+    
+    if(nameField.value === ""){
+        document.getElementById("name-hint").style.display = "block";
+        document.getElementById("name-hint").textContent = "Name required"
+        nameField.parentNode.className="not-valid"
+    }else if(!nameRegex.test(nameField.value)){
         console.log("invalid name")
         isValid = false;
         document.getElementById("name-hint").style.display = "block";
+        document.getElementById("name-hint").textContent = "Name invalid, only letters are allowed"
         nameField.parentNode.className = "not-valid"
     }else{
         document.getElementById("name-hint").style.display = "none";
