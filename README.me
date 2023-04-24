@@ -1,0 +1,21 @@
+Live validation:
+Name
+  If namefield is empty after input has started shows "Name Required" in tip
+  If namefield contains numbers shows tip that says "Name may not contain numbers"
+  
+  
+Submit validation:
+Name
+  May not be empty
+  Must match regex: "/^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/"
+  
+Email
+  Must match regex: "/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/"
+  
+Activities
+  value cost must not be = 0
+  
+Credit card values:
+  Card Nr must match regex: "/^\d{13,16}$/"
+  Zip must match regex: "/^\d{5}$/"
+  CVV must match regex: "/^\d{3}$/"
